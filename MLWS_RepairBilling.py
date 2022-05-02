@@ -4,18 +4,12 @@ from tkinter import ttk
 from tkinter.ttk import Combobox, Style
 from tkinter import *
 
-
-
 # from turtle import clear, width
-
 root=Tk()
 root.title('Repair Billing Manangement System (Mahalaxmi Watch)')
 root.geometry('1280x720')
 # bg_color='#2D9290'
 bg_color='#000000'
-
-p1 = PhotoImage(file = '')
-
 
 #=====================variables===================
 varTitle=StringVar()
@@ -51,6 +45,9 @@ def submit():
 
     sql_string_prdct_dtls = f'''insert into sys.prdct_dtls values("{varBrand.get()}","{varModel.get()}","{varType.get()}","{varDial_Style.get()}","{varDial_Color.get()}","{varCase.get()}","{varStrap.get()}","{varRemarks.get()}","{varPhone_Number.get()}");'''
     myCursor.execute(sql_string_prdct_dtls)
+
+    sql_string_txn_dtls = f'''insert into sys.transaction_dtls values("{varPhone_Number.get()}");'''
+    myCursor.execute(sql_string_txn_dtls)
     
     myDb.commit()
     myDb.close()
