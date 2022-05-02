@@ -3,6 +3,7 @@ import tempfile
 from tkinter import ttk
 from tkinter.ttk import Combobox, Style
 from tkinter import *
+from dateutil.parser import parse
 
 # from turtle import clear, width
 root=Tk()
@@ -40,13 +41,21 @@ def submit():
     myDb = mysql.connector.connect(user='root', password='MLWS2022', host='localhost', database='sys')
     myCursor = myDb.cursor()
     
-    sql_string_cust_dtls = f'''insert into sys.cust_dtls values({varPhone_Number.get()},"{varTitle.get()}","{varName.get()}","{varAddress.get()}");'''
+    sql_string_cust_dtls = f'''insert into sys.cust_dtls values({varPhone_Number.get()},"{varTitle.get()}","{varName.get().capitalize()}","{varAddress.get().capitalize()}");'''
     myCursor.execute(sql_string_cust_dtls)
 
-    sql_string_prdct_dtls = f'''insert into sys.prdct_dtls values("{varBrand.get()}","{varModel.get()}","{varType.get()}","{varDial_Style.get()}","{varDial_Color.get()}","{varCase.get()}","{varStrap.get()}","{varRemarks.get()}","{varPhone_Number.get()}");'''
+    sql_string_prdct_dtls = f'''insert into sys.prdct_dtls values("{varBrand.get()}","{varModel.get().capitalize()}","{varType.get()}","{varDial_Style.get()}","{varDial_Color.get()}","{varCase.get()}","{varStrap.get()}","{varRemarks.get()}","{varPhone_Number.get()}");'''
     myCursor.execute(sql_string_prdct_dtls)
 
-    sql_string_txn_dtls = f'''insert into sys.transaction_dtls values("{varPhone_Number.get()}");'''
+    expected_date_string = f'''{varYear.get()}-{varMonth.get()}-{varDay.get()}'''
+
+    expected_date_date = parse(expected_date_string)
+
+    expected_date = expected_date_date.strftime('%Y-%m-%d')
+
+    txn_id = f'''{varPhone_Number.get()}{varYear.get()}{varMonth.get()}{varDay.get()}'''
+
+    sql_string_txn_dtls = f'''insert into sys.transaction_dtls values("{txn_id}","{varPhone_Number.get()}","{varName.get()}","{varTotalCost.get()}","{varAdvanceCost.get()}","{expected_date}");'''
     myCursor.execute(sql_string_txn_dtls)
     
     myDb.commit()
@@ -183,8 +192,8 @@ varDate_lbl = Label(F2, text='Expected Delivery Date: ', font=('Helvetica', 13),
 varDate_lbl.place(x=20, y=250)
 
 Years = []
-Months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-Days=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31)
+Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+Days=('01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31')
 
 for i in range(2021,2050):
     Years.append(i)
