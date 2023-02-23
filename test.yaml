@@ -1,0 +1,6 @@
+---
+  - name: This is a test yaml
+    hosts: localhost
+    tasks:
+      - name: this is first task
+        shell: "echo Heyyyy"
