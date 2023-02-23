@@ -4,3 +4,5 @@
     tasks:
       - name: this is first task
         shell: "echo Heyyyy"
+      - name: this is a second task
+        shell: "echo Hello"
